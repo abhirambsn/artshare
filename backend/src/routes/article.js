@@ -15,7 +15,7 @@ import { verifyAuth } from "../middlewares/authentication.js";
 
 const router = express.Router();
 
-router.get("/", verifyAuth, getArticlesOfUser);
+router.get("/myarticles", verifyAuth, getArticlesOfUser);
 router.get("/all", getAllPublicArticles);
 router.get("/:id", getArticleById);
 router.post("/", verifyAuth, pushArticle);

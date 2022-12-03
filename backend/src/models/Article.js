@@ -6,6 +6,7 @@ const articleSchema = Schema(
     link: String,
     isPrivate: { type: Boolean, default: false },
     tags: [{ type: String }],
+    author: { type: String, ref: "user" },
   },
   { timestamps: true }
 );

@@ -26,4 +26,12 @@ export const formatProfile = (data) => {
   console.log(chalk.yellowBright(`Total Articles Read:\t${0}`));
 };
 
+export const formatArticle = (data) => {
+    console.log(chalk.cyanBright("Article Details\n"))
+    console.log(chalk.cyanBright(`Article ID:\t${data._id}`))
+    console.log(chalk.cyanBright(`Title:\t${data.title}`))
+    console.log(chalk.cyanBright(`Link:\t${data.link}`))
+    console.log(chalk.cyanBright(`Author:\t${data.author.name}`))
+}
+
 export const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));

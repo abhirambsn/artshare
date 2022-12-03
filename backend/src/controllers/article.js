@@ -25,6 +25,7 @@ export const pushArticle = async (req, res) => {
     link,
     isPrivate: group === "private" ? true : false,
     tags: [],
+    author: req.user.id,
   });
   await article.save();
 
@@ -60,9 +61,18 @@ export const searchArticleByTitle = async (req, res) => {
 };
 
 export const getArticleById = async (req, res) => {
-  // Get ID
-  // Retrieve from DB
-  // Return
+  const id = req.params.id;
+  const data = await Article.findById(id).populate('author').exec();
+  if (data) {
+    return res.status(200).send(data);
+  } else {
+    const label_query = await Article.findOne({ title: id }).exec();
+    if (label_query) {
+      return res.status(200).send(label_query);
+    } else {
+      return res.status(404).send({ message: "No Articles Found" });
+    }
+  }
 };
 
 export const createGroup = async (req, res) => {

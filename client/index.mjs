@@ -9,7 +9,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import ConfigStore from "configstore";
 import axios from "axios";
-import { formatProfile, sleep } from "./util.mjs";
+import { formatArticle, formatProfile, sleep } from "./util.mjs";
 
 const config = new ConfigStore("artshare");
 const yg = yargs(hideBin(process.argv));
@@ -98,22 +98,65 @@ yg.command(
 );
 
 yg.command(
-  "pull [id]",
-  "gets the link of the article with the specified id or label",
+  "get [id] [group] [interactive]",
+  "gets the details of the article with the specified id or label",
   (yrg) => {
     yrg
       .positional("group", {
         describe:
-          "Pulls the article from the given group list instead of a public one",
-        default: null,
+          "Pulls the article from the given group list instead of a public one (type private to push to your private list)",
+        default: "public",
+        demandOption: false,
       })
-      .positional("private", {
-        describe: "Retrieves from your private list (PS: For your eyes only)",
+      .option("interactive", {
+        alias: "i",
+        describe: "Shows a prompt to input fields to push one by one",
         default: false,
       });
   },
-  (argv) => {
-    console.log("Args Recieved are", argv);
+  async (argv) => {
+    let id, group;
+    if (argv.interactive) {
+      id = await inquirer.prompt({
+        name: "Id",
+        message: "Enter Article Id or Title",
+        type: "input",
+      });
+      id = id.Id;
+      group = await inquirer.prompt({
+        name: "Group",
+        default: "public",
+        type: "input",
+        message: "Group Name [private to add in private list]:",
+      });
+      group = group.Group;
+    } else {
+      id = argv.id;
+      group = argv.group;
+    }
+
+    const url = `/article/${id}`;
+
+    const spin = createSpinner(`Fetching Article...\n`).start();
+    // await sleep();
+    const token = config.get("auth.token");
+    if (!token) {
+      spin.error("You are not logged in, kindly login to push articles");
+      process.exit(1);
+    }
+    try {
+      const req = await axios.get("http://localhost:5000" + url, {
+        headers: {
+          "x-access-token": `Bearer ${token}`,
+        },
+      });
+      await sleep();
+
+      if (req.status === 200) {
+        spin.success(`Fetch Complete`);
+        formatArticle(req?.data);
+      }
+    } catch (e) {}
   }
 );
 
