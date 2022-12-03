@@ -1,0 +1,48 @@
+{
+  "name": "artshare-client",
+  "version": "1.0.0",
+  "description": "A Collaborative Terminal based article sharing tool",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "yarn test",
+    "start": "node index.mjs",
+    "artshare": "node index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/abhirambsn/artshare-client.git"
+  },
+  "keywords": [
+    "Article",
+    "Sharing",
+    "CLI",
+    "Terminal",
+    "Node.js"
+  ],
+  "author": "Bhallamudi Sai Narasimha Abhiram",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abhirambsn/artshare-client/issues"
+  },
+  "homepage": "https://github.com/abhirambsn/artshare-client#readme",
+  "dependencies": {
+    "axios": "^1.2.0",
+    "chalk": "^5.1.2",
+    "chalk-animation": "^2.0.3",
+    "configstore": "^6.0.0",
+    "figlet": "^1.5.2",
+    "gradient-string": "^2.0.2",
+    "inquirer": "^9.1.4",
+    "nanospinner": "^1.1.0",
+    "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "@types/chalk-animation": "^1.6.1",
+    "@types/configstore": "^6.0.0",
+    "@types/figlet": "^1.5.5",
+    "@types/gradient-string": "^1.1.2",
+    "@types/inquirer": "^9.0.3",
+    "@types/yargs": "^17.0.15"
+  }
+}
