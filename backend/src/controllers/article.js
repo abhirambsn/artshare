@@ -51,6 +51,8 @@ export const getArticlesOfUser = async (req, res) => {
 
 export const getAllPublicArticles = async (req, res) => {
   // Get List of all public Articles from DB
+  const articles = await Article.find().exec();
+  return res.status(200).send(articles);
   // Return
 };
 
@@ -62,7 +64,7 @@ export const searchArticleByTitle = async (req, res) => {
 
 export const getArticleById = async (req, res) => {
   const id = req.params.id;
-  const data = await Article.findById(id).populate('author').exec();
+  const data = await Article.findById(id).populate("author").exec();
   if (data) {
     return res.status(200).send(data);
   } else {
