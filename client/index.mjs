@@ -260,6 +260,51 @@ yg.command(
 );
 
 yg.command(
+  "all",
+  "List All Public Articles",
+  () => {},
+  async (argv) => {
+    const spin = createSpinner(`Fetching All Articles...\n`).start();
+    // await sleep();
+    const token = config.get("auth.token");
+    if (!token) {
+      spin.error("You are not logged in, kindly login to Get Articles");
+      process.exit(1);
+    }
+    try {
+      const req = await axios.get("http://localhost:5000/article/all", {
+        headers: {
+          "x-access-token": `Bearer ${token}`,
+        },
+      });
+
+      if (req.status === 200) {
+        spin.success("Fetch Complete");
+        const articleName = [];
+        for (const article in req?.data) {
+          articleName.push(req?.data[article].title);
+        }
+        const articleOpt = await inquirer.prompt({
+          type: "list",
+          message: "Choose the article to get details",
+          choices: articleName,
+          name: "article",
+        });
+        formatArticle(req?.data.filter((dt) => dt.title === articleOpt.article)[0]);
+        // req?.data?.map((dt) => {
+        //   formatArticle(dt);
+        // });
+        // console.log(chalk.greenBright(req?.data?.msg));
+      }
+    } catch (e) {
+      // Write to error log
+      console.error(e);
+      spin.error("Error has occurred while adding the article to list :(");
+    }
+  }
+);
+
+yg.command(
   "logout",
   "Logs you out from the application",
   () => {},
